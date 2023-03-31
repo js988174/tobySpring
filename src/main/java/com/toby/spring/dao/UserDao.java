@@ -7,9 +7,7 @@ import java.sql.*;
 public class UserDao {
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/tobySpring", "root", "1111");
+        Connection connection = getConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "insert into  users(id, name, password) values (?,?,?)");
@@ -26,9 +24,7 @@ public class UserDao {
     }
 
     public User get(String  id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/tobySpring", "root", "1111");
+        Connection connection = getConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "select * from users where id = ?");
@@ -48,5 +44,13 @@ public class UserDao {
         connection.close();
 
         return user;
+    }
+
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost/tobySpring", "root", "1111");
+
+        return connection;
     }
 }
