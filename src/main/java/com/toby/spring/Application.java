@@ -13,15 +13,15 @@ public class Application {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		SpringApplication.run(Application.class, args);
 
-		UserDao userDao = new UserDao();
-
-		User user = new User();
-		user.setId("testId");
-		user.setName("testName");
-		user.setPassword("1234");
-
-		userDao.add(user);
-		System.out.println(user.getId() + "등록 성공");
+//		UserDao userDao = new UserDao();
+//
+//		User user = new User();
+//		user.setId("testId");
+//		user.setName("testName");
+//		user.setPassword("1234");
+//
+//		userDao.add(user);
+//		System.out.println(user.getId() + "등록 성공");
 
 	}
 

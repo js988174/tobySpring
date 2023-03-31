@@ -6,12 +6,18 @@ import java.sql.*;
 
 public class UserDao {
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection connection = getConnection();
+    private SimpleConnectionMaker simpleConnectionMaker;
 
-        PreparedStatement ps = connection.prepareStatement(
-                "insert into  users(id, name, password) values (?,?,?)");
+    public UserDao(SimpleConnectionMaker simpleConnectionMaker) {
+        this.simpleConnectionMaker = simpleConnectionMaker;
+    }
 
+    public void add(User user) throws SQLException, ClassNotFoundException {
+        Connection c = simpleConnectionMaker.makeNewConnection();
+
+        PreparedStatement ps = c.prepareStatement(
+                "insert into users(id, name, password) values (?, ?, ?)"
+        );
         ps.setString(1, user.getId());
         ps.setString(2, user.getName());
         ps.setString(3, user.getPassword());
@@ -19,38 +25,31 @@ public class UserDao {
         ps.executeUpdate();
 
         ps.close();
-        connection.close();
-
+        c.close();
     }
 
-    public User get(String  id) throws ClassNotFoundException, SQLException {
-        Connection connection = getConnection();
+    public User get(String id) throws SQLException, ClassNotFoundException {
+        Connection c = simpleConnectionMaker.makeNewConnection();
 
-        PreparedStatement ps = connection.prepareStatement(
-                "select * from users where id = ?");
-
+        PreparedStatement ps = c.prepareStatement(
+                "select * from users where id = ?"
+        );
         ps.setString(1, id);
 
-        ResultSet resultSet = ps.executeQuery();
-        resultSet.next();
+        ResultSet rs = ps.executeQuery();
+        rs.next();
 
         User user = new User();
-        user.setId(resultSet.getString("id"));
-        user.setName(resultSet.getString("name"));
-        user.setPassword(resultSet.getString("password"));
+        user.setId(rs.getString("id"));
+        user.setName(rs.getString("name"));
+        user.setPassword(rs.getString("password"));
 
-        resultSet.close();
+        rs.close();
         ps.close();
-        connection.close();
+        c.close();
 
         return user;
     }
-
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/tobySpring", "root", "1111");
-
-        return connection;
-    }
 }
+
+
