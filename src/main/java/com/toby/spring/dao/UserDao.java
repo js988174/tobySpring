@@ -2,13 +2,15 @@ package com.toby.spring.dao;
 
 import com.toby.spring.entity.User;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
 
     private SimpleConnectionMaker simpleConnectionMaker;
+    private DataSource dataSource;
 
-    public UserDao(SimpleConnectionMaker simpleConnectionMaker) {
+    public UserDao() {
         this.simpleConnectionMaker = simpleConnectionMaker;
     }
 
@@ -50,6 +52,8 @@ public class UserDao {
 
         return user;
     }
+
+    public void setDataSource(DataSource dataSource) { this.dataSource = dataSource; }
 }
 
 
